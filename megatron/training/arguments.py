@@ -1052,6 +1052,10 @@ def _add_training_args(parser):
                        help='Use the built-in pytorch profiler. '
                        'Useful if you wish to view profiles in tensorboard.',
                        dest='use_pytorch_profiler')
+    group.add_argument('--pytorch-profiler-options', nargs='*', type=str, default=[],
+                       help='Pytorch profiler options. "stack" for call stack, '
+                       '"shapes" to record shapes, "flops" to estimate FLOPS, '
+                       '"mem" to track memory.')
     group.add_argument('--profile-ranks', nargs='+', type=int, default=[0],
                        help='Global ranks to profile.')
     group.add_argument('--tp-comm-overlap', action='store_true', help='Enables the '

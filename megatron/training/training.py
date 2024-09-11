@@ -1064,9 +1064,12 @@ def train(forward_step_func, model, optimizer, opt_param_scheduler,
             warmup=1 if args.profile_step_start > 0 else 0,
             active=args.profile_step_end-args.profile_step_start,
             repeat=1),
-        on_trace_ready=torch.profiler.tensorboard_trace_handler(args.tensorboard_dir),
-        record_shapes=True,
-        with_stack=True)
+        activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA],
+        on_trace_ready=torch.profiler.tensorboard_trace_handler(args.tensorboard_dir, use_gzip=True),
+        record_shapes="shapes" in args.pytorch_profiler_options,
+        profile_memory="mem" in args.pytorch_profiler_options,
+        with_stack="stack" in args.pytorch_profiler_options,
+        with_flops="flops" in args.pytorch_profiler_options)
         prof.start()
 
     while iteration < args.train_iters:
